@@ -1,0 +1,6 @@
+ra0       get_site_survey:
+Ch  SSID                             BSSID               Security               Siganl(%)W-Mode  ExtCH  NT WPS DPID Printable Len SSID_in_Hex
+3   xxxxxxxxxxxxxx                   00:11:11:11:11:11   WPA2PSK/AES            7        11b/g/n ABOVE  In NO  NONE 1         14
+9   yyyyyyyyy                        00:22:22:22:22:22   WPAPSK/TKIP            7        11b/g   NONE   In NO  NONE 1         9
+11  zzzzzzzzzzzzz                    00:33:33:33:33:33   WPA1PSKWPA2PSK/TKIPAES 26       11b/g/n BELOW  In YES NONE 1         13
+9   0x756E69636F6465E58EBBE6ADBB     00:44:44:44:44:44   WPA2PSK/AES            100      11b/g/n BELOW  In NO  NONE 0         13  \x75\x6e\x69\x63\x6f\x64\x65\xe5\x8e\xbb\xe6\xad\xbb
