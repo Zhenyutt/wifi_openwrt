@@ -160,6 +160,9 @@ int set_conf(FILE *fp, const char *key, const char *value);
 int set_conf_int(FILE *fp, const char *key, int value);
 void close_conf(FILE *fp);
 
+int set_option(FILE *fp, const char *key, const char *value);
+int set_option_int(FILE *fp, const char *key, int value);
+
 //wps
 int wps_set_status(struct wifi_iface *iface, char *status);
 

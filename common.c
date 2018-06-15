@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>
-#include "lib_aes_pbkdf2.h"
+//#include "lib_aes_pbkdf2.h"
 
 /********************************
  * Global variable
@@ -156,7 +156,7 @@ int string_replace_to_buffer(char *string, char *old, char *new, unsigned int ma
 char *gmtk_decrypt_helper(char *enc_text, char *plain_text, unsigned int plain_size)
 {
 	char *output = NULL;
-	if(gemtek_aes_decrypt(enc_text, &output) == 0) {
+	if(0/*gemtek_aes_decrypt(enc_text, &output) == 0*/) {
 		snprintf(plain_text, plain_size, "%s", output);
 		free(output);
 	} else {

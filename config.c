@@ -9,8 +9,8 @@
 #include "cms_helper.h"
 #include "common.h"
 #include "config.h"
-#include "ralink.h"
-
+//#include "ralink.h"
+#include "openwrt.h"
 
 
 
@@ -66,7 +66,7 @@ FILE * init_conf(const char *filename)
 	do_system("mkdir -p %s", dname);
 	free(filename_buffer);
 
-	FILE *fp = fopen(filename, "w");
+	FILE *fp = fopen(filename, "a");
 	if(fp == NULL) {
 		fprintf(stderr, "%s: fail to create file", __FUNCTION__);
 	}
@@ -125,6 +125,32 @@ void close_conf(FILE *fp)
 	fclose(fp);
 }
 
+int set_option(FILE *fp, const char *key, const char *value) {
+	if(fp == NULL) {
+		return -1;
+	}
+	
+	if(value == NULL) {
+		return -1;
+	}
+	
+	if(strcmp(value, "") == 0) {
+		return -1;
+	} 
+	
+	int len = fprintf(fp, "\toption '%s' '%s'\n", key, value);
+	if(len <= 0) {
+		return -1; //error
+	}
+
+	return 0;
+}
+
+int set_option_int(FILE *fp, const char *key, int value) {
+	char value_str[128] = {0};
+	snprintf(value_str, sizeof(value_str), "%d", value);
+	return set_option(fp, key, value_str);
+}
 
 /***************************************
  * WPS API

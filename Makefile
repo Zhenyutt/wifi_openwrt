@@ -3,7 +3,7 @@ PWD=$(shell pwd)
 TOP_DIR ?= $(PWD)/../../..
 ifeq ("$(HOST)","")
 #target build
-include $(TOP_DIR)/include/target-build.mk
+##include $(TOP_DIR)/include/target-build.mk
 else
 #host build
 endif
@@ -26,18 +26,21 @@ CFLAGS+= -MMD -MP
 LDFLAGS+=
 
 CFLAGS += -I$(TARGET_BUILD_DIR)/include
-LDFLAGS += -L$(TARGET_BUILD_DIR)/lib
-LDLIBS += -lcms -lcms_helper -laes_pbkdf2 -lssl -lcrypto -ljson-c -lm
+LDFLAGS += -L.
+###$(TARGET_BUILD_DIR)/lib
+LDLIBS += -lcms -lcms_helper
+### -laes_pbkdf2 -lssl -lcrypto -ljson-c -lm
 
-app_objs = wifi.o common.o config.o \
-           ralink.o ralink_wps.o ralink_logger.o \
-           ralink_ap_scan.o \
-           ralink_sta_list.o ralink_driver.o dhcp_lease.o \
+app_objs = wifi.o common.o config.o openwrt.o
+##           ralink.o ralink_wps.o ralink_logger.o \
+##           ralink_ap_scan.o \
+##           ralink_sta_list.o ralink_driver.o dhcp_lease.o \
 
-all: $(app) install
+all: $(app)
+### install
 
 ${app}: $(app_objs)
-	$(CC) $(LDFLAGS) $^ -o $(app) $(LDLIBS)
+	$(CC) $(LDFLAGS) $^ -o $(app) $(LDLIBS) -Wl,-rpath=.
 
 
 install:
