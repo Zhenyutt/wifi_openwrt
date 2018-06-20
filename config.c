@@ -138,7 +138,7 @@ int set_option(FILE *fp, const char *key, const char *value) {
 		return -1;
 	} 
 	
-	int len = fprintf(fp, "\toption '%s' '%s'\n", key, value);
+	int len = fprintf(fp, "\toption %s '%s'\n", key, value);
 	if(len <= 0) {
 		return -1; //error
 	}
@@ -150,6 +150,43 @@ int set_option_int(FILE *fp, const char *key, int value) {
 	char value_str[128] = {0};
 	snprintf(value_str, sizeof(value_str), "%d", value);
 	return set_option(fp, key, value_str);
+}
+
+int set_option_channels(FILE *fp, const char *key, unsigned int *channel_option, int channel_option_num) {
+	int i;
+	int len;
+	
+	len = fprintf(fp, "\toption %s '", key);
+	if(len <= 0) {
+		return -1; //error
+	}
+	
+	for(i = 0; i < channel_option_num; i++) {
+		if(channel_option[i] == 0) { //ignore zero
+			continue;
+		}
+		
+		if(i == channel_option_num - 1) { //last
+			len = fprintf(fp, "%d", channel_option[i]);
+			if(len <= 0) {
+				return -1; //error
+			}
+			
+		}
+		else {
+			len = fprintf(fp, "%d ", channel_option[i]);
+			if(len <= 0) {
+				return -1; //error
+			}
+		}
+	}
+	
+	len = fprintf(fp, "'\n");
+	if(len <= 0) {
+		return -1; //error
+	}
+	
+	return 0;
 }
 
 /***************************************

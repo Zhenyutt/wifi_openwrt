@@ -114,6 +114,11 @@ char *openwrt_channel(char *strbuff, size_t buff_size, int channel) {
 	return strbuff;
 }
 
+char *openwrt_channels(char *strbuff, size_t buff_size, int *channel_option) {
+	
+	return strbuff;
+}
+
 
 char *openwrt_key(char *strbuff, size_t buff_size, char *encryption, int key_wep_index, char *key_psk) {
 	if(encryption_is_wep(encryption)) {
@@ -156,7 +161,7 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 	//set_option(fp, "ifname", "");
 	set_option_int(fp, "disabled", radio->enable ? 0 : 1);
 	set_option(fp, "channel", openwrt_channel(strbuff, sizeof(strbuff), radio->channel));
-	//set_list_channels(fp, "channels", radio->channel_option, radio->channel_option_num);
+	set_option_channels(fp, "channels", radio->channel_option, radio->channel_option_num);
 	set_option(fp, "hwmode", op_wmode->hwmode);
 	set_option(fp, "htmode", op_htmode->map_htmode);
 	//set_option_int(fp, "chanbw", "");
@@ -179,6 +184,13 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 	set_option_int(fp, "frag", radio->frag_threshold);
 	set_option_int(fp, "rts", radio->rts_threshold);
 	//set_option_int(fp, "antenna_gain", "");
+	
+	//Inactivity Timeout Options
+	//set_option_int(fp, "disassoc_low_ack", );
+	//set_option_int(fp, "max_inactivity", );
+	//set_option_int(fp, "skip_inactivity_poll", );
+	//set_option_int(fp, "max_listen_interval", );
+	
 	set_conf_line(fp, "");
 		
 	
@@ -189,24 +201,28 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 		
 		set_conf_line(fp, "config 'wifi-iface'");
 		set_option(fp, "device", format_string(strbuff, sizeof(strbuff), "radio%d", radio->index));
-		set_option(fp, "network", "lan");//
+		set_option(fp, "network", "lan"); //bridge
 		set_option(fp, "mode", iface[i]->mode);
 		set_option_int(fp, "disabled", iface[i]->enable ? 0 : 1);
 		set_option(fp, "ssid", iface[i]->ssid);
 		//set_option(fp, "bssid", "");
 		//set_option(fp, "mesh_id", "");
 		set_option_int(fp, "hidden", iface[i]->hidden);
-		//set_option_int(fp, "isolate", ""); //
+		set_option_int(fp, "isolate", iface[i]->isolate_sta);
 		//set_option_int(fp, "doth", "");
 		set_option_int(fp, "wmm", iface[i]->wmm);
 		set_option(fp, "encryption", op_enc->map_encryption);
 		set_option(fp, "key", openwrt_key(strbuff, sizeof(strbuff), iface[i]->encryption, iface[i]->key_wep_index, iface[i]->key_psk));
-		set_option(fp, "key1", iface[i]->key_wep);
-		set_option(fp, "key2", iface[i]->key_wep);
-		set_option(fp, "key3", iface[i]->key_wep);
-		set_option(fp, "key4", iface[i]->key_wep);
+		
+		//set wep key
+		sprintf(strbuff, "key%d", iface[i]->key_wep_index);
+		set_option(fp, strbuff, iface[i]->key_wep);
+		
 		set_option(fp, "macfilter", iface[i]->macfilter);
-		set_option(fp, "maclist", iface[i]->macfilter_list);//
+		
+		char AccessControlList[MAX_MACSTR_SIZE * MAX_STA_NUM] = {0};
+		string_replace_to_buffer(iface[i]->macfilter_list, ",", " ", 0, AccessControlList, sizeof(AccessControlList));
+		set_option(fp, "maclist", AccessControlList);
 		
 		//set_option(fp, "iapp_interface", "");
 		//set_option_int(fp, "rsn_preauth", "");
@@ -222,12 +238,6 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 		//set_option_int(fp, "wds", "");
 		//set_option_int(fp, "start_disabled", "");
 		//set_option_int(fp, "powersave", "");
-		
-		//Inactivity Timeout Options
-		//set_option_int(fp, "disassoc_low_ack", );
-		//set_option_int(fp, "max_inactivity", );
-		//set_option_int(fp, "skip_inactivity_poll", );
-		//set_option_int(fp, "max_listen_interval", );
 		
 		
 		//wps
