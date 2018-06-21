@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 {
 	//simulate
 	cms_init();
-	cms_config_import("wifi.conf");
+	cms_config_import("/wifi.conf");
 	
 	char *prog_name = NULL;
 

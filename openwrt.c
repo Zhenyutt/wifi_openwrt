@@ -158,8 +158,6 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 	set_option(fp, "type", "mac80211");
 	//set_option(fp, "phy", "");
 	//set_option(fp, "macaddr", "");
-	//set_option(fp, "ifname", "");
-	set_option_int(fp, "disabled", radio->enable ? 0 : 1);
 	set_option(fp, "channel", openwrt_channel(strbuff, sizeof(strbuff), radio->channel));
 	set_option_channels(fp, "channels", radio->channel_option, radio->channel_option_num);
 	set_option(fp, "hwmode", op_wmode->hwmode);
@@ -179,11 +177,12 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 	//set_option(fp, "require_mode", "");
 	//set_option_int(fp, "log_level", "");
 	//set_option_int(fp, "legacy_rates", "");
-	//set_option_int(fp, "noscan", "");
 	//set_option_int(fp, "htcoex", "");
 	set_option_int(fp, "frag", radio->frag_threshold);
 	set_option_int(fp, "rts", radio->rts_threshold);
 	//set_option_int(fp, "antenna_gain", "");
+	
+	set_option_int(fp, "noscan", "1");
 	
 	//Inactivity Timeout Options
 	//set_option_int(fp, "disassoc_low_ack", );
@@ -191,6 +190,15 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 	//set_option_int(fp, "skip_inactivity_poll", );
 	//set_option_int(fp, "max_listen_interval", );
 	
+	//template path
+	if(radio->index == 0) {
+		set_option(fp, "path", "platform/10180000.wmac");
+	}
+	else if(radio->index == 1) {
+		set_option(fp, "path", "pci0000:00/0000:00:00.0/0000:01:00.0");
+	}
+	
+	set_option_int(fp, "disabled", radio->enable ? 0 : 1);
 	set_conf_line(fp, "");
 		
 	
@@ -203,12 +211,12 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 		set_option(fp, "device", format_string(strbuff, sizeof(strbuff), "radio%d", radio->index));
 		set_option(fp, "network", "lan"); //bridge
 		set_option(fp, "mode", iface[i]->mode);
-		set_option_int(fp, "disabled", iface[i]->enable ? 0 : 1);
 		set_option(fp, "ssid", iface[i]->ssid);
 		//set_option(fp, "bssid", "");
 		//set_option(fp, "mesh_id", "");
 		set_option_int(fp, "hidden", iface[i]->hidden);
 		set_option_int(fp, "isolate", iface[i]->isolate_sta);
+		set_option(fp, "ifname", iface[i]->ifname);
 		//set_option_int(fp, "doth", "");
 		set_option_int(fp, "wmm", iface[i]->wmm);
 		set_option(fp, "encryption", op_enc->map_encryption);
@@ -223,6 +231,7 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 		char AccessControlList[MAX_MACSTR_SIZE * MAX_STA_NUM] = {0};
 		string_replace_to_buffer(iface[i]->macfilter_list, ",", " ", 0, AccessControlList, sizeof(AccessControlList));
 		set_option(fp, "maclist", AccessControlList);
+		
 		
 		//set_option(fp, "iapp_interface", "");
 		//set_option_int(fp, "rsn_preauth", "");
@@ -249,6 +258,8 @@ int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio
 		set_option(fp, "wps_manufacturer", iface[i]->wps_manufacturer);
 		//set_option_int(fp, "wps_pushbutton", "");
 		//set_option(fp, "wps_pin", "");
+		
+		set_option_int(fp, "disabled", iface[i]->enable ? 0 : 1);
 		set_conf_line(fp, "");
 	}
 	
@@ -360,6 +371,9 @@ int openwrt_restart(int argc, char* argv[])
 		
 		generate_openwrt_conf(&setting, radio);
 		restart_openwrt_iface(&setting, radio);
+		
+		//reload
+		do_system("wifi reload radio%d", radio->index);
 	}
 	
 
