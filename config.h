@@ -41,6 +41,7 @@
 #define MAX_WPS_MODEL_NAME_SIZE		(32+1)
 #define MAX_WPS_MODEL_NUMBER_SIZE	(32+1)
 #define MAX_WPS_SERIAL_NUMBER_SIZE	(32+1)
+#define MAX_WPS_AP_PIN		(8+1)
 
 #define MAX_AUTH_NAME_SIZE	16
 
@@ -127,6 +128,7 @@ struct wifi_iface {
 	char		 	wps_model_name[MAX_WPS_MODEL_NAME_SIZE];
 	char		 	wps_model_number[MAX_WPS_MODEL_NUMBER_SIZE];
 	char		 	wps_serial_number[MAX_WPS_SERIAL_NUMBER_SIZE];
+	char		 	wps_ap_pin[MAX_WPS_AP_PIN];
 	char			radius_server_ipaddr[MAX_IPSTR_SIZE];
 	unsigned int	radius_server_port;
 	char			radius_server_key[MAX_KEY_SIZE];

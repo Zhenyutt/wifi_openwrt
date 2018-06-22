@@ -315,6 +315,7 @@ int wifi_get_setting(struct wifi_setting *setting)
 		iface->hidden = cms_get_uint("wifi_iface%d_hidden", 0, i);
 		iface->wmm = cms_get_uint("wifi_iface%d_wmm", 0, i);
 
+		snprintf(iface->mode, sizeof(iface->mode), "%s", cms_get_str("wifi_iface%d_mode", "ap", i));
 		snprintf(iface->ifname, sizeof(iface->ifname), "%s", cms_get_str("wifi_iface%d_ifname", "", i));
 		snprintf(iface->bridge, sizeof(iface->bridge), "%s", cms_get_str("wifi_iface%d_bridge", "", i));
 		snprintf(iface->macaddr, sizeof(iface->macaddr), "%s", cms_get_str("wifi_iface%d_macaddr", "", i));
@@ -366,6 +367,7 @@ int wifi_get_setting(struct wifi_setting *setting)
 		snprintf(iface->wps_model_name, sizeof(iface->wps_model_name), "%s", cms_get_str("wifi_iface%d_wps_model_name", "", i));
 		snprintf(iface->wps_model_number, sizeof(iface->wps_model_number), "%s", cms_get_str("wifi_iface%d_wps_model_number", "", i));
 		snprintf(iface->wps_serial_number, sizeof(iface->wps_serial_number), "%s", cms_get_str("wifi_iface%d_wps_serial_number", "", i));
+		snprintf(iface->wps_ap_pin, sizeof(iface->wps_ap_pin), "%s", cms_get_str("wifi_iface%d_wps_ap_pin", "", i));
 
 		if(strstr(iface->wps_support_encryption, iface->encryption) == NULL) {
 			iface->wps_not_support = 1; //current encryption do not support wps
