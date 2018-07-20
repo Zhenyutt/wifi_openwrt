@@ -24,7 +24,7 @@
 #define MAX_TXPOWER_ADJECT_SIZE	16
 #define MAX_TXPOWER_DBM_OPTION_NUM 8
 
-#define MAX_IFNAME_SIZE		8
+#define MAX_IFNAME_SIZE		32
 #define MAX_MACSTR_SIZE		19
 #define MAX_IPSTR_SIZE		16
 #define _MAX_SSID_SIZE		32
@@ -165,6 +165,7 @@ void close_conf(FILE *fp);
 int set_option(FILE *fp, const char *key, const char *value);
 int set_option_int(FILE *fp, const char *key, int value);
 int set_option_channels(FILE *fp, const char *key, unsigned int *channel_option, int channel_option_num);
+int set_list_maclist(FILE *fp, char *macfilter_list);
 
 //wps
 int wps_set_status(struct wifi_iface *iface, char *status);

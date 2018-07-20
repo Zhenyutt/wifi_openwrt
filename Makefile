@@ -26,13 +26,11 @@ CFLAGS+= -MMD -MP
 LDFLAGS+=
 
 CFLAGS += -I$(TARGET_BUILD_DIR)/include
-##LDFLAGS += -L$(TARGET_BUILD_DIR)/lib
-##LDLIBS += -lcms -lcms_helper -laes_pbkdf2 -lssl -lcrypto -ljson-c -lm
+LDFLAGS += -L$(TARGET_BUILD_DIR)/lib
+LDLIBS += -lcms -lcms_helper -laes_pbkdf2 -lssl -lcrypto -ljson-c -lm
 
-app_objs = wifi.o common.o config.o openwrt.o cms.o cms_helper.o
-##           ralink.o ralink_wps.o ralink_logger.o \
-##           ralink_ap_scan.o \
-##           ralink_sta_list.o ralink_driver.o dhcp_lease.o \
+app_objs = wifi.o common.o config.o openwrt.o
+
 
 all: $(app)
 ### install

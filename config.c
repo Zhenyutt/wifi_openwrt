@@ -189,6 +189,23 @@ int set_option_channels(FILE *fp, const char *key, unsigned int *channel_option,
 	return 0;
 }
 
+int set_list_maclist(FILE *fp, char *macfilter_list) {
+	char maclist[MAX_MACFILTER_LIST_SIZE];
+	snprintf(maclist, sizeof(maclist), "%s", macfilter_list);
+	
+	char *token, *saveptr;
+	token = maclist;
+	while(1) {
+		token = strtok_r(token, ",", &saveptr);
+		if(token == NULL) {
+			break;
+		}
+		fprintf(fp, "\tlist maclist '%s'\n", token);
+		token = saveptr;
+	}
+	return 0;
+}
+
 /***************************************
  * WPS API
  ***************************************/
@@ -292,7 +309,7 @@ int wifi_get_setting(struct wifi_setting *setting)
 		snprintf(radio->config_path, sizeof(radio->config_path), "%s", cms_get_str("wifi_radio%d_config_path", "", i));
 		snprintf(radio->country, sizeof(radio->country), "%s", cms_get_str("wifi_radio%d_country", "US", i));
 		snprintf(radio->wireless_mode, sizeof(radio->wireless_mode), "%s", cms_get_str("wifi_radio%d_wireless_mode", "unknown", i));
-		snprintf(radio->htmode, sizeof(radio->htmode), "%s", cms_get_str("wifi_radio%d_htmode", "unknown", i));
+		snprintf(radio->htmode, sizeof(radio->htmode), "%s", cms_get_str("wifi_radio%d_htmode", "", i));
 		snprintf(radio->band, sizeof(radio->band), "%s", cms_get_str("wifi_radio%d_band", "", i));
 
 		//Authenticator
@@ -356,7 +373,7 @@ int wifi_get_setting(struct wifi_setting *setting)
 
 		snprintf(iface->macfilter, sizeof(iface->macfilter), "%s", cms_get_str("wifi_iface%d_macfilter", "disabled", i));
 		snprintf(iface->macfilter_list, sizeof(iface->macfilter_list), "%s", cms_get_str("wifi_iface%d_macfilter_list", "", i));
-
+		
 		//wps
 		iface->wps = cms_get_uint("wifi_iface%d_wps", 1, i);
 		snprintf(iface->wps_method, sizeof(iface->wps_method), "%s", cms_get_str("wifi_iface%d_wps_method", "pbc,pin", i));

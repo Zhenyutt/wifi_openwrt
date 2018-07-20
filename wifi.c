@@ -13,6 +13,7 @@
 */
 #include "openwrt.h"
 
+
 struct cmd_func {
 	char *proc_name;
 	char *subcmd;
@@ -36,13 +37,13 @@ struct cmd_func cmd_func_list[] = {
 int main(int argc, char* argv[])
 {
 	//simulate
-	cms_init();
-	cms_config_import("/wifi.conf");
+	//cms_init();
+	//cms_config_import("/etc/config/wifi.conf");
 	
 	char *prog_name = NULL;
 
 	prog_name = basename(argv[0]);
-	if(strcmp(prog_name, "wifi") == 0 && argc >= 2) {
+	if(strcmp(prog_name, "wificmd") == 0 && argc >= 2) {
 		argc--;
 		argv++;
 		struct cmd_func *p = NULL;

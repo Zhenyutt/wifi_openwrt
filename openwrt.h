@@ -35,6 +35,9 @@ struct openwrt_encryption* query_openwrt_encryption(char *encryption);
 
 char *openwrt_channel(char *strbuff, size_t buff_size, int channel);
 char *openwrt_key(char *strbuff, size_t buff_size, char *encryption, int key_wep_index, char *key_psk);
+int wps_label(char *method);
+int wps_pushbutton(char *method);
+
 
 int generate_openwrt_conf(struct wifi_setting *setting, struct wifi_radio *radio);
 int restart_openwrt_iface(struct wifi_setting *setting, struct wifi_radio *radio);
